@@ -19,11 +19,9 @@ const TaskProvider=({children})=>{
 
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <TaskProvider>
       <RouterProvider router={routes}>
         <App />
       </RouterProvider>
     </TaskProvider>
-  </StrictMode>,
 )
