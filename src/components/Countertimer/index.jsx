@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 
+
 export default function CounterTimer() {
     const [timer, setTimer] = useState(0)
     const [stTimer, setStTimer] = useState(false)
@@ -24,22 +25,43 @@ export default function CounterTimer() {
     }, [stTimer])
 
     const timerSetter = (type) => {
-        if (type === "start") {
-            setTimer(timer + 1)
+        switch (type) {
+            case 'start': {
+                setTimer(timer + 1)
+                break;
+            }
+            case 'stop': {
+                setStTimer(false)
+                setTimer(timer)
+                break;
+            }
+            case 'reset': {
+                setTimer(0)
+                setStTimer(false);
+                break;
+            }
+            default: {
+                setTimer(0);
+                setStTimer(false)
+                break;
+            }
         }
-        else if (type === "stop") {
-            setStTimer(false)
-            setTimer(timer)
-            console.log(stTimer)
-        }
-        else if (type === "reset") {
-            setTimer(0)
-            setStTimer(false);
-        }
-        else {
-            setTimer(0);
-            setStTimer(false)
-        }
+        // if (type === "start") {
+        //     setTimer(timer + 1)
+        // }
+        // else if (type === "stop") {
+        //     setStTimer(false)
+        //     setTimer(timer)
+        //     console.log(stTimer)
+        // }
+        // else if (type === "reset") {
+        //     setTimer(0)
+        //     setStTimer(false);
+        // }
+        // else {
+        //     setTimer(0);
+        //     setStTimer(false)
+        // }
     }
 
     const modifyTime = (time) => {
@@ -56,7 +78,7 @@ export default function CounterTimer() {
 
     return (
         <>
-            {timer}
+            <p>{timer}</p>
             <button onClick={() => modifyTime(!stTimer)}>{stTimer ? 'pause' : 'start'}</button>
             <button onClick={() => { timerSetter("reset"); setStTimer(false) }}>reset</button>
         </>
