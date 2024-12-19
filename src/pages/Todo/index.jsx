@@ -151,7 +151,7 @@ export default function TodoItem() {
 
     return (
         <>
-            <div className=" flex justify-center gap-x-3 ">
+            {/* <div className=" flex justify-center gap-x-3 ">
                 <span>
                     <Button onClick={() => dispatch({ type: "decrement" })} disabled={state.counter === 0}>decrement</Button>
                 </span>
@@ -161,7 +161,7 @@ export default function TodoItem() {
                 <span>
                     <Button onClick={() => dispatch({ type: "increment" })}>increment</Button>
                 </span>
-            </div>
+            </div> */}
             <div className="flex gap-x-3  justify-center mt-5">
                 <span>
                     <input

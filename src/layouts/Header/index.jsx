@@ -7,6 +7,8 @@ export default function Header() {
             <span className="flex justify-center gap-x-5">
                 <Link to="/todo" className="hover:bg-black px-2 rounded-xl">Todo</Link>
                 <Link to="/counter" className="hover:bg-black px-2 rounded-xl">counter</Link>
+                <Link to="/reduxcounter" className="hover:bg-black px-2 rounded-xl">Redux Counter</Link>
+                <Link to="/reduxtask" className="hover:bg-black px-2 rounded-xl">Redux Task</Link>
             </span>
         </div>
     )
