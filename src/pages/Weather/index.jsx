@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { weatherThunk } from "../../services/WeatherSlice";
+import { weatherThunk } from "../../services/WeatherSlice/thunk/WeatherThunk";
+import { addWeatherThunk } from "../../services/WeatherSlice/thunk/addWeatherThunk";
+import { deleteWeatherThunk } from "../../services/WeatherSlice/thunk/deleteWeatherThunk";
+import { editWeatherThunk } from "../../services/WeatherSlice/thunk/editWeatherThunk";
 import Button from "../../components/Button";
-import { Box } from "@mui/material";
+import { Box, Input } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 export default function WeatherDashboard() {
@@ -10,31 +13,65 @@ export default function WeatherDashboard() {
     { field: "name", headerName: "Device Name", width: 200, editable: false },
     { field: "color", headerName: "Color", width: 80 },
     { field: "price", headerName: "Price", width: 80 },
-    {
-      field: "description",
-      headerName: "Description",
-      width: 100,
-    },
-    {
-      field: "year",
-      headerName: "Year",
-      width: 80,
-    },
-    { field: "generation", header: "Generation", width: 100 },
-    { field: "capacity", header: "Capacity", width: 80 },
-    { field: "Cpu model", header: "Cpu Model", width: 100 },
-    {
-      field: "HarsDisksize",
-      header: "HARD disk size",
-      width: 110,
-    },
+    { field: "description", headerName: "Description", width: 100 },
+    { field: "year", headerName: "Year", width: 80 },
+    { field: "Generation", header: "Generation", width: 100 },
+    { field: "Capacity", header: "Capacity", width: 80 },
+    { field: "CPU model", header: "CPU model", width: 100 },
+    { field: "Hard disk size", header: "Hard disk size", width: 110 },
     { field: "Strap Colour", header: "Strap Color", width: 100 },
     { field: "Case Size", header: "Case Size", width: 100 },
+    { field: "Screen size", header: "Screen size", width: 100 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params) => (
+        <>
+          <Button
+            onClick={() => handleEdit(params.row)}
+            variant="contained"
+            color="primary"
+            size="small"
+            style={{ marginRight: "10px" }}
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={() => handleDelete(params.id)}
+            variant="contained"
+            color="error"
+            size="small"
+          >
+            Delete
+          </Button>
+        </>
+      ),
+    },
   ];
 
   const dispatch = useDispatch();
 
-  const [name, setName] = useState("");
+  // Get saved filter values from localStorage, or set to empty string if not found
+  const savedName = localStorage.getItem("name") || "";
+  const savedColor = localStorage.getItem("color") || "";
+
+  const [name, setName] = useState(savedName);
+  const [color, setColor] = useState(savedColor);
+  const [deviceName, setDeviceName] = useState("");
+  const [deviceColor, setDeviceColor] = useState("");
+  const [generation, setGeneration] = useState("1st");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [year, setYear] = useState();
+  const [capacity, setCapcity] = useState("");
+  const [cpu, setCpu] = useState("");
+  const [hd, setHd] = useState("");
+  const [strapCol, setStrapCol] = useState("");
+  const [storeType, setStoreType] = useState("GB");
+  const [caseSize, setCaseSize] = useState("");
+  const [screenSize, setScreenSize] = useState("");
+  const [editingId, setEditingId] = useState(null);
   const { weatherData, status, error } = useSelector((state) => state.Weather);
 
   useEffect(() => {
@@ -42,171 +79,149 @@ export default function WeatherDashboard() {
       dispatch(weatherThunk());
     }
   }, [status]);
-  // const unitsmeasureHandler = (value) => {
-  //   console.log("unit=", value);
-  //   setUnit(value);
-  // };
-  // function filterCityHandler(value) {
-  //   setCity(value);
-  // }
 
-  // const formDataHandler = (e) => {
-  //   e.preventDefault();
-
-  //   dispatch(weatherThunk());
-  // };
+  // Save filters to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("name", name);
+    localStorage.setItem("color", color);
+  }, [name, color]);
 
   if (status === "loading" || status === "pending" || status === "idle")
     return <p>loading data</p>;
   if (error) return <p>{error}</p>;
-  const toatalrows = weatherData.map((data) => {
+
+  const totalRows = weatherData.map((data) => {
     return {
       id: data.id,
       name: data.name,
-      color: data.data && data.data.color,
+      color: data.data && (data.data.color || data.data.Color),
+      price: data.data && (data.data.price || data.data.Price),
       description: data.data && data.data.Description,
-      capacity: data.data && data.data.capacity,
-      generation: data.data && data.data.generation,
+      Capacity: data.data && (data.data.Capacity || data.data.capacity),
+      Generation: data.data && (data.data.Generation || data.data.generation),
       year: data.data && data.data.year,
       ["Strap Colour"]: data.data && data.data["Strap Colour"],
-      ["Case Size"]: data.dat && data.data["Case Size"],
+      ["Case Size"]: data.data && data.data["Case Size"],
       ["Hard disk size"]: data.data && data.data["Hard disk size"],
       ["CPU model"]: data.data && data.data["CPU model"],
+      ["Screen size"]: data.data && data.data["Screen size"],
     };
   });
-  const rows = toatalrows.filter((data) =>
-    data.name.toLocaleLowerCase().includes(name.toLocaleLowerCase())
-  );
+
+  const rows = totalRows.filter((data) => {
+    const matchesName = data.name
+      .toLocaleLowerCase()
+      .includes(name.toLocaleLowerCase());
+    const matchesColor =
+      color === "" ||
+      (data.color &&
+        data.color.toLocaleLowerCase().includes(color.toLocaleLowerCase()));
+
+    return matchesName && matchesColor;
+  });
+  function handleDelete(id) {
+    dispatch(deleteWeatherThunk(id));
+  }
+  function handleEdit(row) {
+    const cap = parseInt(row.Capacity.match(/\d+/)[0], 10);
+    const csz = parseInt(row["Case Size"].match(/\d+/)[0], 10);
+    const hdz = parseInt(row["Hard disk size"].match(/\d+/)[0], 10);
+
+    setDeviceName(row.name || "");
+    setDeviceColor(row.color || "");
+    setPrice(row.price || 0);
+    setDescription(row.description || "");
+    setYear(row.year || 0);
+    setGeneration(row.Generation || "1st");
+    setCapcity(cap || "");
+    setCpu(row["CPU model"] || "");
+    setHd(hdz || "");
+    setStrapCol(row["Strap Colour"] || ""); // Ensure this sets the correct value
+    setCaseSize(csz || 0);
+    setScreenSize(row["Screen size"] || 0);
+    setEditingId(row.id);
+  }
+
+  function GenerationChangeHandler(value) {
+    setGeneration(value);
+  }
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleColorChange = (e) => {
+    setColor(e.target.value);
+  };
+  function formHandler(e) {
+    e.preventDefault();
+
+    const cap = capacity + "GB";
+    const csz = caseSize + "mm";
+    const hardDisk = hd + storeType;
+
+    const data = {
+      name: deviceName,
+      data: {
+        price: price,
+        color: deviceColor,
+        Description: description,
+        year: year,
+        generation: generation,
+        capacity: cap,
+        ["CPU model"]: cpu,
+        ["Strap Colour"]: strapCol,
+        ["Case Size"]: csz,
+        ["Screen size"]: screenSize,
+        ["Hard disk size"]: hardDisk,
+      },
+    };
+
+    if (editingId) {
+      // Dispatch an edit thunk if editing
+      dispatch(editWeatherThunk({ id: editingId, data }));
+      setEditingId(null); // Reset after saving
+    } else {
+      // Dispatch an add thunk if creating new
+      dispatch(addWeatherThunk(data));
+    }
+
+    // Clear form after submission
+    resetForm();
+  }
+
+  function resetForm() {
+    setDeviceName("");
+    setDeviceColor("");
+    setPrice(0);
+    setDescription("");
+    setYear(0);
+    setGeneration("1st");
+    setCapcity("");
+    setCpu("");
+    setHd("");
+    setStrapCol("");
+    setCaseSize(0);
+    setScreenSize(0);
+  }
   return (
     <div className="">
-      {console.log(weatherData)}
-      {/* <form onSubmit={formDataHandler} className="flex items-center flex-col">
-        {/* <input
-          type="number"
-          min={-90}
-          max={90}
-          name="lat"
-          className="border-blue-500 border w-2/12"
-          placeholder="Latitude"
-          onChange={(e) => setLat(e.target.value)}
-        />
-        <input
-          type="number"
-          min={-180}
-          max={180}
-          name="long"
-          className="border-blue-500 border w-2/12"
-          placeholder="Longitude"
-          onChange={(e) => setLong(e.target.value)}
-        /> */}
-      {/* <select
-          onChange={(e) => filterCityHandler(e.target.value)}
-          value={city}
-        >
-          <option value="New Delhi"> New Delhi</option>
-          <option value="New York"> New York</option>
-          <option value="Dhaka">Dhaka</option>
-          <option value="Mumbai">Mumbai</option>
-        </select> }
-        <Button type="submit">submit</Button>
-        {/* <div className="bg-black text-white">
-          <span className="flex border border-white justify-around">
-            <p>humidity</p> <p>{weatherData.current.humidity}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>windDegree </p>
-            <p>{weatherData.current.wind_degree}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>wind speed</p> <p> {weatherData.current.wind_speed}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>wind direction</p>
-            <p>{weatherData.current.wind_dir}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>longititude</p>
-            <p>{weatherData.location.lon}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>pressure</p>
-            <p> {weatherData.current.pressure}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>tempreture</p>
-            <p> {weatherData.current.temperature}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>latitude</p>
-            <p>{weatherData.location.lat}</p>
-          </span>
-          <span className="flex border border-white justify-around">
-            <p>loaction </p>
-            <p>{weatherData.request.query}</p>
-          </span>
-        </div> }
-        {console.log(weatherData)}
-
-        {/* {weatherData.map((data) => {
-          return (
-            <span key={data.id} className="border-8 bg-black text-white w-6/12">
-              <span className="flex justify-between border">
-                <p className="font-bold">Device</p> <p>{data.name}</p>
-              </span>
-              <span className="flex justify-between border">
-                <p className="font-bold">color</p>
-                <p>{data.data && data.data.color}</p>
-              </span>
-              <span className="flex justify-between border">
-                <p className="font-bold">capacity</p>
-                <p>{data.data && data.data.capacity}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">price</p>
-                <p>{data.data && data.data.price}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">Generation</p>
-                <p>{data.data && data.data.generation}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">year</p>
-                <p>{data.data && data.data.year}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">cpu model</p>
-                <p>{data.data && data.data["CPU model"]}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">Hard Disk size</p>
-                <p>{data.data && data.data["Hard disk size"]}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">Strap Colour</p>
-                <p>{data.data && data.data["Strap Colour"]}</p>
-              </span>
-              <span className="flex justify-between">
-                <p className="font-bold">Case Size</p>
-                <p>{data.data && data.data["Case Size"]}</p>
-              </span>
-            </span>
-          );
-        })} }        
-      </form> */}
+      {/* Input fields for filtering */}
       <input
         type="text"
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={handleNameChange}
         className="border border-blue-500"
-        placeholder="Enter tet to enter"
+        placeholder="Enter text to filter by name"
       />
-      {/* <TextField
-        id="outlined-basic"
-        label="Outlined"
-        variant="outlined"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-      /> */}
+      <input
+        type="text"
+        value={color}
+        onChange={handleColorChange}
+        className="border border-blue-500"
+        placeholder="Enter color to filter"
+      />
+
+      {/* DataGrid for displaying filtered data */}
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={rows}
@@ -221,6 +236,141 @@ export default function WeatherDashboard() {
           pageSizeOptions={[5]}
         />
       </Box>
+      <form
+        className="flex flex-col  items-center"
+        onSubmit={formHandler}
+        noValidate
+        autoComplete="off"
+      >
+        <input
+          type="text"
+          placeholder="Enter name"
+          onChange={(e) => setDeviceName(e.target.value)}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+          value={deviceName}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Enter Color"
+          onChange={(e) => setDeviceColor(e.target.value)}
+          value={deviceColor}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+        />
+        <input
+          type="number"
+          placeholder="Enter price"
+          onChange={(e) => setPrice(e.target.value)}
+          value={price}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+        />
+        <textarea
+          placeholder="Enter description"
+          rows="5"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+        ></textarea>
+        <input
+          type="number"
+          placeholder="Enter Year"
+          onChange={(e) => setYear(e.target.value)}
+          value={year}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+        />
+        <select
+          onChange={(e) => GenerationChangeHandler(e.target.value)}
+          value={generation}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+        >
+          <option value="1st">1st</option>
+          <option value="2nd">2nd</option>
+          <option value="3rd">3rd</option>
+          <option value="4th">4th</option>
+          <option value="5th">5th</option>
+          <option value="6th">6th</option>
+          <option value="7th">7th</option>
+          <option value="8th">8th</option>
+          <option value="9th">9th</option>
+          <option value="10th">10th</option>
+        </select>
+        <input
+          type="number"
+          placeholder="Enter capacity"
+          onChange={(e) => setCapcity(e.target.value)}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+          value={capacity}
+        />
+        <input
+          type="text"
+          placeholder="Enter Cpu model"
+          onChange={(e) => setCpu(e.target.value)}
+          value={cpu}
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+        />
+        <label>Strap Color</label>
+        <div className="flex gap-x-2 m-1">
+          <label>
+            <input
+              type="radio"
+              name="strapColor"
+              value="Eldeberry"
+              onChange={(e) => setStrapCol(e.target.value)}
+              checked={strapCol === "Eldeberry"} // Check if value matches strapCol
+            />
+            Eldeberry
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="strapColor"
+              value="violet"
+              onChange={(e) => setStrapCol(e.target.value)}
+              checked={strapCol === "violet"} // Check if value matches strapCol
+            />
+            Violet
+          </label>
+        </div>
+
+        <input
+          type="number"
+          placeholder="Case size"
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+          onChange={(e) => setCaseSize(e.target.value)}
+          value={caseSize}
+        />
+        <input
+          type="number"
+          placeholder="Screen size"
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+          onChange={(e) => setScreenSize(e.target.value)}
+          value={screenSize}
+        />
+        <input
+          type="number"
+          placeholder="Hard Disk size"
+          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
+          onChange={(e) => setHd(e.target.value)}
+          value={hd}
+        />
+        <select
+          onChange={(e) => setStoreType(e.target.value)}
+          value={storeType}
+        >
+          <option value="GB">GB</option>
+          <option value="TB">TB</option>
+        </select>
+        <button
+          type="submit"
+          className="m-1 bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          Add
+        </button>
+      </form>
+
+      {/* <button onClick={() => dispatch(addWeatherThunk())} variant="outlined">
+        Add
+      </button> */}
     </div>
   );
 }
