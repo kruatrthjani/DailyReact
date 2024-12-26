@@ -35,7 +35,7 @@ export default function WeatherDashboard() {
             size="small"
             style={{ marginRight: "10px" }}
           >
-            Edit
+            {editingId ? "cancel" : "Edit"}
           </Button>
           <Button
             onClick={() => handleDelete(params.id)}
@@ -123,23 +123,40 @@ export default function WeatherDashboard() {
     dispatch(deleteWeatherThunk(id));
   }
   function handleEdit(row) {
-    const cap = parseInt(row.Capacity.match(/\d+/)[0], 10);
-    const csz = parseInt(row["Case Size"].match(/\d+/)[0], 10);
-    const hdz = parseInt(row["Hard disk size"].match(/\d+/)[0], 10);
+    if (!editingId) {
+      const cap = parseInt(row.Capacity.match(/\d+/)[0], 10);
+      const csz = parseInt(row["Case Size"].match(/\d+/)[0], 10);
+      const hdz = parseInt(row["Hard disk size"].match(/\d+/)[0], 10);
 
-    setDeviceName(row.name || "");
-    setDeviceColor(row.color || "");
-    setPrice(row.price || 0);
-    setDescription(row.description || "");
-    setYear(row.year || 0);
-    setGeneration(row.Generation || "1st");
-    setCapcity(cap || "");
-    setCpu(row["CPU model"] || "");
-    setHd(hdz || "");
-    setStrapCol(row["Strap Colour"] || ""); // Ensure this sets the correct value
-    setCaseSize(csz || 0);
-    setScreenSize(row["Screen size"] || 0);
-    setEditingId(row.id);
+      setDeviceName(row.name || "");
+      setDeviceColor(row.color || "");
+      setPrice(row.price || 0);
+      setDescription(row.description || "");
+      setYear(row.year || 0);
+      setGeneration(row.Generation || "1st");
+      setCapcity(cap || "");
+      setCpu(row["CPU model"] || "");
+      setHd(hdz || "");
+      setStrapCol(row["Strap Colour"] || ""); // Ensure this sets the correct value
+      setCaseSize(csz || 0);
+      setScreenSize(row["Screen size"] || 0);
+      setEditingId(row.id);
+    } else {
+      setEditingId("");
+      setDeviceName("");
+      setPrice(0);
+      setDeviceColor("");
+      setYear(0);
+      setDescription("");
+      setCapcity("");
+      setGeneration("1st");
+      setCpu("");
+      setCapcity("");
+      setStrapCol("");
+      setHd("");
+      setCaseSize(0);
+      setScreenSize(0);
+    }
   }
 
   function GenerationChangeHandler(value) {
