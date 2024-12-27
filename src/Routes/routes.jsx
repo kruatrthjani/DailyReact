@@ -5,6 +5,7 @@ import Counter from "../pages/Counter";
 import ReduxCounter from "../pages/Reduxcounter";
 import ReduxTaskManager from "../pages/ReduxTask";
 import WeatherDashboard from "../pages/Weather";
+import WeathForm from "../pages/Weather/WeatherForm";
 
 export const routes = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const routes = createBrowserRouter([
       {
         path: "/reduxweather",
         element: <WeatherDashboard />,
+      },
+      {
+        path: "/weatherform",
+        element: <WeathForm />,
       },
     ],
   },

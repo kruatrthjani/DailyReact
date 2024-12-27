@@ -4,11 +4,13 @@ import { weatherThunk } from "../../services/WeatherSlice/thunk/WeatherThunk";
 import { addWeatherThunk } from "../../services/WeatherSlice/thunk/addWeatherThunk";
 import { deleteWeatherThunk } from "../../services/WeatherSlice/thunk/deleteWeatherThunk";
 import { editWeatherThunk } from "../../services/WeatherSlice/thunk/editWeatherThunk";
-import Button from "../../components/Button";
+import Button from "@mui/material/Button";
 import { Box, Input } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 export default function WeatherDashboard() {
+  const navigate = useNavigate();
   const columns = [
     { field: "name", headerName: "Device Name", width: 200, editable: false },
     { field: "color", headerName: "Color", width: 80 },
@@ -25,27 +27,26 @@ export default function WeatherDashboard() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 350,
       renderCell: (params) => (
-        <>
+        <span className="flex gap-x-3">
           <Button
             onClick={() => handleEdit(params.row)}
             variant="contained"
             color="primary"
             size="small"
-            style={{ marginRight: "10px" }}
           >
-            {editingId ? "cancel" : "Edit"}
+            {editingId === params.id ? "cancel" : "Edit"}
           </Button>
           <Button
             onClick={() => handleDelete(params.id)}
             variant="contained"
-            color="error"
+            color="primary"
             size="small"
           >
             Delete
           </Button>
-        </>
+        </span>
       ),
     },
   ];
@@ -124,9 +125,27 @@ export default function WeatherDashboard() {
   }
   function handleEdit(row) {
     if (!editingId) {
-      const cap = parseInt(row.Capacity.match(/\d+/)[0], 10);
-      const csz = parseInt(row["Case Size"].match(/\d+/)[0], 10);
-      const hdz = parseInt(row["Hard disk size"].match(/\d+/)[0], 10);
+      let cap;
+      let csz;
+      let hdz;
+
+      let regex = /\d/;
+
+      if (!regex.test(row.Capacity)) {
+        cap = 0;
+      } else {
+        cap = parseInt(row.Capacity.match(/\d+/)[0], 10);
+      }
+      if (!regex.test(row["Case Size"])) {
+        csz = 0;
+      } else {
+        csz = parseInt(row["Case Size"].match(/\d+/)[0], 10);
+      }
+      if (!regex.test(row["Hard disk size"])) {
+        hdz = 0;
+      } else {
+        hdz = parseInt(row["Hard disk size"].match(/\d+/)[0], 10);
+      }
 
       setDeviceName(row.name || "");
       setDeviceColor(row.color || "");
@@ -141,70 +160,77 @@ export default function WeatherDashboard() {
       setCaseSize(csz || 0);
       setScreenSize(row["Screen size"] || 0);
       setEditingId(row.id);
+
+      const data = {
+        name: row.name || "",
+        color: row.color || "",
+        price: row.price || 0,
+        description: row.description || "",
+        year: row.year || 0,
+        generation: row.Generation || "1st",
+        capacity: cap || "",
+        cpu: row["CPU model"] || "",
+        hd: hdz || "",
+        strapCol: row["Strap Colour"] || "",
+        caseSize: csz || 0,
+        screenSize: row["Screen size"] || 0,
+        id: row.id,
+      };
+      const id = row.id;
+      navigate("/weatherform", { state: id });
     } else {
+      resetForm();
       setEditingId("");
-      setDeviceName("");
-      setPrice(0);
-      setDeviceColor("");
-      setYear(0);
-      setDescription("");
-      setCapcity("");
-      setGeneration("1st");
-      setCpu("");
-      setCapcity("");
-      setStrapCol("");
-      setHd("");
-      setCaseSize(0);
-      setScreenSize(0);
     }
   }
 
-  function GenerationChangeHandler(value) {
-    setGeneration(value);
-  }
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
+  // function GenerationChangeHandler(value) {
+  //   setGeneration(value);
+  // }
+  // const handleNameChange = (e) => {
+  //   setName(e.target.value);
+  // };
 
-  const handleColorChange = (e) => {
-    setColor(e.target.value);
-  };
-  function formHandler(e) {
-    e.preventDefault();
+  // const handleColorChange = (e) => {
+  //   setColor(e.target.value);
+  // };
+  // function formHandler(e) {
+  //   e.preventDefault();
 
-    const cap = capacity + "GB";
-    const csz = caseSize + "mm";
-    const hardDisk = hd + storeType;
+  //   const cap = capacity + "GB";
+  //   const csz = caseSize + "mm";
+  //   const hardDisk = hd + storeType;
 
-    const data = {
-      name: deviceName,
-      data: {
-        price: price,
-        color: deviceColor,
-        Description: description,
-        year: year,
-        generation: generation,
-        capacity: cap,
-        ["CPU model"]: cpu,
-        ["Strap Colour"]: strapCol,
-        ["Case Size"]: csz,
-        ["Screen size"]: screenSize,
-        ["Hard disk size"]: hardDisk,
-      },
-    };
+  //   const data = {
+  //     name: deviceName,
+  //     data: {
+  //       price: price,
+  //       color: deviceColor,
+  //       Description: description,
+  //       year: year,
+  //       generation: generation,
+  //       capacity: cap,
+  //       ["CPU model"]: cpu,
+  //       ["Strap Colour"]: strapCol,
+  //       ["Case Size"]: csz,
+  //       ["Screen size"]: screenSize,
+  //       ["Hard disk size"]: hardDisk,
+  //     },
+  //   };
 
-    if (editingId) {
-      // Dispatch an edit thunk if editing
-      dispatch(editWeatherThunk({ id: editingId, data }));
-      setEditingId(null); // Reset after saving
-    } else {
-      // Dispatch an add thunk if creating new
-      dispatch(addWeatherThunk(data));
-    }
+  //   if (editingId) {
+  //     // Dispatch an edit thunk if editing
+  //     dispatch(editWeatherThunk({ id: editingId, data }));
 
-    // Clear form after submission
-    resetForm();
-  }
+  //     setEditingId(null); // Reset after saving
+  //   } else {
+  //     // Dispatch an add thunk if creating new
+  //     dispatch(addWeatherThunk(data));
+  //   }
+
+  //   // Clear form after submission
+  //   resetForm();
+  // }
 
   function resetForm() {
     setDeviceName("");
@@ -223,7 +249,7 @@ export default function WeatherDashboard() {
   return (
     <div className="">
       {/* Input fields for filtering */}
-      <input
+      {/* <input
         type="text"
         value={name}
         onChange={handleNameChange}
@@ -236,8 +262,10 @@ export default function WeatherDashboard() {
         onChange={handleColorChange}
         className="border border-blue-500"
         placeholder="Enter color to filter"
-      />
-
+      /> */}
+      <Button variant="outlined" onClick={() => navigate("/weatherform")}>
+        create new
+      </Button>
       {/* DataGrid for displaying filtered data */}
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
@@ -253,137 +281,6 @@ export default function WeatherDashboard() {
           pageSizeOptions={[5]}
         />
       </Box>
-      <form
-        className="flex flex-col  items-center"
-        onSubmit={formHandler}
-        noValidate
-        autoComplete="off"
-      >
-        <input
-          type="text"
-          placeholder="Enter name"
-          onChange={(e) => setDeviceName(e.target.value)}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-          value={deviceName}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Enter Color"
-          onChange={(e) => setDeviceColor(e.target.value)}
-          value={deviceColor}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-        />
-        <input
-          type="number"
-          placeholder="Enter price"
-          onChange={(e) => setPrice(e.target.value)}
-          value={price}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-        />
-        <textarea
-          placeholder="Enter description"
-          rows="5"
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-        ></textarea>
-        <input
-          type="number"
-          placeholder="Enter Year"
-          onChange={(e) => setYear(e.target.value)}
-          value={year}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-        />
-        <select
-          onChange={(e) => GenerationChangeHandler(e.target.value)}
-          value={generation}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-        >
-          <option value="1st">1st</option>
-          <option value="2nd">2nd</option>
-          <option value="3rd">3rd</option>
-          <option value="4th">4th</option>
-          <option value="5th">5th</option>
-          <option value="6th">6th</option>
-          <option value="7th">7th</option>
-          <option value="8th">8th</option>
-          <option value="9th">9th</option>
-          <option value="10th">10th</option>
-        </select>
-        <input
-          type="number"
-          placeholder="Enter capacity"
-          onChange={(e) => setCapcity(e.target.value)}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-          value={capacity}
-        />
-        <input
-          type="text"
-          placeholder="Enter Cpu model"
-          onChange={(e) => setCpu(e.target.value)}
-          value={cpu}
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-        />
-        <label>Strap Color</label>
-        <div className="flex gap-x-2 m-1">
-          <label>
-            <input
-              type="radio"
-              name="strapColor"
-              value="Eldeberry"
-              onChange={(e) => setStrapCol(e.target.value)}
-              checked={strapCol === "Eldeberry"} // Check if value matches strapCol
-            />
-            Eldeberry
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="strapColor"
-              value="violet"
-              onChange={(e) => setStrapCol(e.target.value)}
-              checked={strapCol === "violet"} // Check if value matches strapCol
-            />
-            Violet
-          </label>
-        </div>
-
-        <input
-          type="number"
-          placeholder="Case size"
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-          onChange={(e) => setCaseSize(e.target.value)}
-          value={caseSize}
-        />
-        <input
-          type="number"
-          placeholder="Screen size"
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-          onChange={(e) => setScreenSize(e.target.value)}
-          value={screenSize}
-        />
-        <input
-          type="number"
-          placeholder="Hard Disk size"
-          className="m-1 w-64 border border-gray-500 rounded-md text-xs p-2"
-          onChange={(e) => setHd(e.target.value)}
-          value={hd}
-        />
-        <select
-          onChange={(e) => setStoreType(e.target.value)}
-          value={storeType}
-        >
-          <option value="GB">GB</option>
-          <option value="TB">TB</option>
-        </select>
-        <button
-          type="submit"
-          className="m-1 bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Add
-        </button>
-      </form>
 
       {/* <button onClick={() => dispatch(addWeatherThunk())} variant="outlined">
         Add

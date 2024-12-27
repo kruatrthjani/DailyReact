@@ -24,7 +24,6 @@ export const apiRequest = async ({ data, method }) => {
     data: method === "POST" || method == "PUT" ? data : null,
   };
   try {
-    console.log("delete url=", url);
     const response = await axios.request(options);
     console.log(response.data);
     return response.data;
