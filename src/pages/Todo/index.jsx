@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext, useReducer } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { TaskContext } from "../../main";
-import {
-  reducer,
-  intialState,
-} from "../../services/api/thunk/reducers/counter";
+// import {
+//   reducer,
+//   intialState,
+// } from "../../services/api/thunk/reducers/counter";
+import { reducer, intialState } from "../../services/thunk/reducers/counter";
 import Button from "../../components/Button";
 
 export default function TodoItem() {

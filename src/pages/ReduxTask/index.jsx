@@ -1,14 +1,20 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import Button from "../../components/Button";
+// import {
+//   addTaskThnuk,
+//   deleteTaskThunk,
+//   editTaskThunk,
+//   fetchTaskThunk,
+//   completeTaskThunk,
+// } from "../../services/api/thunk/TasklSlice";
 import {
   addTaskThnuk,
-  deleteTaskThunk,
-  editTaskThunk,
   fetchTaskThunk,
+  editTaskThunk,
+  deleteTaskThunk,
   completeTaskThunk,
-} from "../../services/api/thunk/TasklSlice";
-
+} from "../../services/thunk/TasklSlice";
 export default function ReduxTaskManager() {
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);

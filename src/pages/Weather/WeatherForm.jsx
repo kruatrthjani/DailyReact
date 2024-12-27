@@ -13,7 +13,7 @@ import {
   addWeatherThunk,
   editWeatherThunk,
   weatherThunk,
-} from "../../services/api/thunk/allthunks";
+} from "../../services/thunk/allthunks";
 import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";

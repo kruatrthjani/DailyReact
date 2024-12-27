@@ -1,4 +1,4 @@
-import { apiRequest } from "..";
+import { apiRequest } from "../api/weatherapi";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addWeatherThunk = createAsyncThunk(

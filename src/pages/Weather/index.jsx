@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   weatherThunk,
   deleteWeatherThunk,
-} from "../../services/api/thunk/allthunks";
+  editWeatherThunk,
+} from "../../services/thunk/allthunks";
 import Button from "@mui/material/Button";
 import {
   Box,
@@ -44,7 +45,7 @@ export default function WeatherDashboard() {
             color="primary"
             size="small"
           >
-            {editingId === params.id ? "cancel" : "Edit"}
+            <i className="fa-regular fa-pen-to-square"></i>
           </Button>
           <Button
             onClick={() => handleOpenDialog(params.id)}
@@ -52,7 +53,7 @@ export default function WeatherDashboard() {
             color="primary"
             size="small"
           >
-            Delete
+            <i className="fa-solid fa-trash" sx="color: #f3f4f7;"></i>
           </Button>
         </span>
       ),
@@ -284,9 +285,7 @@ export default function WeatherDashboard() {
         className="border border-blue-500"
         placeholder="Enter color to filter"
       /> */}
-      <Button variant="outlined" onClick={() => navigate("/weatherform")}>
-        create new
-      </Button>
+
       {/* DataGrid for displaying filtered data */}
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
