@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { editWeatherThunk } from "./thunk/editWeatherThunk";
-import { deleteWeatherThunk } from "./thunk/deleteWeatherThunk";
-import { weatherThunk } from "./thunk/WeatherThunk";
-import { addWeatherThunk } from "./thunk/addWeatherThunk";
+import {
+  weatherThunk,
+  deleteWeatherThunk,
+  editWeatherThunk,
+  addWeatherThunk,
+} from "../allthunks";
 // export const weatherThunk = createAsyncThunk("fetch/WeatherData", async () => {
 //   const rsData = await apiRequest({ method: "GET" });
 //   console.log("response data=", rsData);

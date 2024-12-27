@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { weatherThunk } from "../../services/WeatherSlice/thunk/WeatherThunk";
-import { addWeatherThunk } from "../../services/WeatherSlice/thunk/addWeatherThunk";
-import { deleteWeatherThunk } from "../../services/WeatherSlice/thunk/deleteWeatherThunk";
-import { editWeatherThunk } from "../../services/WeatherSlice/thunk/editWeatherThunk";
+import {
+  weatherThunk,
+  deleteWeatherThunk,
+} from "../../services/api/thunk/allthunks";
 import Button from "@mui/material/Button";
-import { Box, Input } from "@mui/material";
+import {
+  Box,
+  Input,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 
@@ -39,7 +47,7 @@ export default function WeatherDashboard() {
             {editingId === params.id ? "cancel" : "Edit"}
           </Button>
           <Button
-            onClick={() => handleDelete(params.id)}
+            onClick={() => handleOpenDialog(params.id)}
             variant="contained"
             color="primary"
             size="small"
@@ -56,7 +64,7 @@ export default function WeatherDashboard() {
   // Get saved filter values from localStorage, or set to empty string if not found
   const savedName = localStorage.getItem("name") || "";
   const savedColor = localStorage.getItem("color") || "";
-
+  const [open, setOpen] = useState(false);
   const [name, setName] = useState(savedName);
   const [color, setColor] = useState(savedColor);
   const [deviceName, setDeviceName] = useState("");
@@ -73,6 +81,7 @@ export default function WeatherDashboard() {
   const [caseSize, setCaseSize] = useState("");
   const [screenSize, setScreenSize] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
   const { weatherData, status, error } = useSelector((state) => state.Weather);
 
   useEffect(() => {
@@ -120,8 +129,18 @@ export default function WeatherDashboard() {
 
     return matchesName && matchesColor;
   });
-  function handleDelete(id) {
-    dispatch(deleteWeatherThunk(id));
+  function handleDelete() {
+    dispatch(deleteWeatherThunk(deletingId));
+    handleCloseDialog();
+  }
+
+  function handleOpenDialog(id) {
+    setDeletingId(id);
+    setOpen(true);
+  }
+  function handleCloseDialog() {
+    setOpen(false);
+    setDeletingId(null);
   }
   function handleEdit(row) {
     if (!editingId) {
@@ -246,6 +265,8 @@ export default function WeatherDashboard() {
     setCaseSize(0);
     setScreenSize(0);
   }
+  let temp = weatherData.find((data) => data.id === deletingId);
+
   return (
     <div className="">
       {/* Input fields for filtering */}
@@ -281,7 +302,19 @@ export default function WeatherDashboard() {
           pageSizeOptions={[5]}
         />
       </Box>
-
+      <Dialog open={open} onClose={handleCloseDialog} className="px-2">
+        <DialogTitle> Delete row</DialogTitle>
+        <DialogContentText className="flex flex-col px-3">
+          Are you sure you want to delete a specific DialogContent
+          <Box sx={{ fontWeight: 900, color: "black" }}>
+            {temp ? temp.name : ""}
+          </Box>
+        </DialogContentText>
+        <DialogActions>
+          <Button onClick={() => handleCloseDialog()}>cancel</Button>
+          <Button onClick={() => handleDelete()}>OK</Button>
+        </DialogActions>
+      </Dialog>
       {/* <button onClick={() => dispatch(addWeatherThunk())} variant="outlined">
         Add
       </button> */}

@@ -7,7 +7,7 @@ import {
   editTaskThunk,
   fetchTaskThunk,
   completeTaskThunk,
-} from "../../services/TasklSlice";
+} from "../../services/api/thunk/TasklSlice";
 
 export default function ReduxTaskManager() {
   const [name, setName] = useState("");
@@ -87,7 +87,6 @@ export default function ReduxTaskManager() {
         <option value="all">All</option>
         <option value="pending">pending</option>
         <option value="completed">completed</option>
-        
       </select>
 
       <input

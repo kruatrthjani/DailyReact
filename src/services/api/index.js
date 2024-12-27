@@ -1,16 +1,6 @@
 import axios from "axios";
 
 export const apiRequest = async ({ data, method }) => {
-  console.log("key=", import.meta.env.VITE_SOME_KEY);
-  const key = import.meta.env.VITE_SOME_KEY;
-
-  // const options = {
-  //   method: "GET",
-  //   url: `https://api.weatherstack.com/current?access_key=${key}`,
-  //   params: {
-  //     query: city,
-  //   },
-  // };
   console.log("id=", data);
   let url = `https://api.restful-api.dev/objects`;
   if (method === "DELETE") {

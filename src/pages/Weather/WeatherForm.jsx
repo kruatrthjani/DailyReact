@@ -9,9 +9,11 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import TextField from "@mui/material/TextField";
-import { addWeatherThunk } from "../../services/WeatherSlice/thunk/addWeatherThunk";
-import { editWeatherThunk } from "../../services/WeatherSlice/thunk/editWeatherThunk";
-import { weatherThunk } from "../../services/WeatherSlice/thunk/WeatherThunk";
+import {
+  addWeatherThunk,
+  editWeatherThunk,
+  weatherThunk,
+} from "../../services/api/thunk/allthunks";
 import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -147,6 +149,7 @@ export default function WeathForm() {
 
     // Clear form after submission
     resetForm();
+    navigate("/reduxweather");
   }
 
   return (
