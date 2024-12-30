@@ -1,5 +1,20 @@
+import { userapi } from "../api/userapi";
 import { apiRequest } from "../api/weatherapi";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
+export const LoginThunk = createAsyncThunk(
+  "login/userLogin",
+  async ({ username, password }) => {
+    const data = {
+      username,
+      password,
+      expiresInMins: 30,
+    };
+    const resData = await userapi({ method: "POST", data });
+
+    return resData;
+  }
+);
 
 export const addWeatherThunk = createAsyncThunk(
   "add/weatherData",

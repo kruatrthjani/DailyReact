@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   weatherThunk,
   deleteWeatherThunk,
-  editWeatherThunk,
 } from "../../services/thunk/allthunks";
 import Button from "@mui/material/Button";
 import {
@@ -17,7 +17,8 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
-
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 export default function WeatherDashboard() {
   const navigate = useNavigate();
   const columns = [
@@ -38,24 +39,10 @@ export default function WeatherDashboard() {
       headerName: "Actions",
       width: 350,
       renderCell: (params) => (
-        <span className="flex gap-x-3">
-          <Button
-            onClick={() => handleEdit(params.row)}
-            variant="contained"
-            color="primary"
-            size="small"
-          >
-            <i className="fa-regular fa-pen-to-square"></i>
-          </Button>
-          <Button
-            onClick={() => handleOpenDialog(params.id)}
-            variant="contained"
-            color="primary"
-            size="small"
-          >
-            <i className="fa-solid fa-trash" sx="color: #f3f4f7;"></i>
-          </Button>
-        </span>
+        <div className="flex gap-x-3  items-center  h-full">
+          <EditIcon onClick={() => handleEdit(params.row)} />
+          <DeleteIcon onClick={() => handleOpenDialog(params.id)} />
+        </div>
       ),
     },
   ];
@@ -68,19 +55,7 @@ export default function WeatherDashboard() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(savedName);
   const [color, setColor] = useState(savedColor);
-  const [deviceName, setDeviceName] = useState("");
-  const [deviceColor, setDeviceColor] = useState("");
-  const [generation, setGeneration] = useState("1st");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [year, setYear] = useState();
-  const [capacity, setCapcity] = useState("");
-  const [cpu, setCpu] = useState("");
-  const [hd, setHd] = useState("");
-  const [strapCol, setStrapCol] = useState("");
-  const [storeType, setStoreType] = useState("GB");
-  const [caseSize, setCaseSize] = useState("");
-  const [screenSize, setScreenSize] = useState("");
+
   const [editingId, setEditingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const { weatherData, status, error } = useSelector((state) => state.Weather);
@@ -145,57 +120,6 @@ export default function WeatherDashboard() {
   }
   function handleEdit(row) {
     if (!editingId) {
-      let cap;
-      let csz;
-      let hdz;
-
-      let regex = /\d/;
-
-      if (!regex.test(row.Capacity)) {
-        cap = 0;
-      } else {
-        cap = parseInt(row.Capacity.match(/\d+/)[0], 10);
-      }
-      if (!regex.test(row["Case Size"])) {
-        csz = 0;
-      } else {
-        csz = parseInt(row["Case Size"].match(/\d+/)[0], 10);
-      }
-      if (!regex.test(row["Hard disk size"])) {
-        hdz = 0;
-      } else {
-        hdz = parseInt(row["Hard disk size"].match(/\d+/)[0], 10);
-      }
-
-      setDeviceName(row.name || "");
-      setDeviceColor(row.color || "");
-      setPrice(row.price || 0);
-      setDescription(row.description || "");
-      setYear(row.year || 0);
-      setGeneration(row.Generation || "1st");
-      setCapcity(cap || "");
-      setCpu(row["CPU model"] || "");
-      setHd(hdz || "");
-      setStrapCol(row["Strap Colour"] || ""); // Ensure this sets the correct value
-      setCaseSize(csz || 0);
-      setScreenSize(row["Screen size"] || 0);
-      setEditingId(row.id);
-
-      const data = {
-        name: row.name || "",
-        color: row.color || "",
-        price: row.price || 0,
-        description: row.description || "",
-        year: row.year || 0,
-        generation: row.Generation || "1st",
-        capacity: cap || "",
-        cpu: row["CPU model"] || "",
-        hd: hdz || "",
-        strapCol: row["Strap Colour"] || "",
-        caseSize: csz || 0,
-        screenSize: row["Screen size"] || 0,
-        id: row.id,
-      };
       const id = row.id;
       navigate("/weatherform", { state: id });
     } else {
@@ -287,6 +211,17 @@ export default function WeatherDashboard() {
       /> */}
 
       {/* DataGrid for displaying filtered data */}
+      <Box className="flex justify-end my-2">
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => navigate("/weatherform")}
+        >
+          <Box className="flex items-center gap-x-2 ">
+            <i className="fa-solid fa-plus "></i> <p className>create New</p>
+          </Box>
+        </Button>
+      </Box>
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={rows}

@@ -29,65 +29,73 @@ export default function Header() {
       <span className="flex justify-center gap-x-5">
         <Container maxWidth="1">
           <Toolbar>
-            {location.pathname === "/reduxweather" ? (
-              <Button
-                variant="outlined"
-                color="white"
-                onClick={() => navigate("/weatherform")}
-              >
-                <Box className="flex items-center gap-x-2 ">
-                  <i className="fa-solid fa-plus "></i>{" "}
-                  <p className>create New</p>
-                </Box>
-              </Button>
-            ) : (
-              ""
-            )}
+            <Box>
+              <Typography>Logo </Typography>
+            </Box>
+
             <Box className="flex flex-1 justify-center gap-x-5">
               <Box
                 sx={{
                   display: "flex",
                 }}
               >
+                {location.pathname !== "/login" && (
+                  <Link
+                    to="/todo"
+                    className={`${
+                      location.pathname === "/todo" ? "bg-black" : ""
+                    } p-2  `}
+                  >
+                    Todo
+                  </Link>
+                )}
+                {location.pathname !== "/login" && (
+                  <Link
+                    to="/counter"
+                    className={`${
+                      location.pathname === "/counter" ? "bg-black" : ""
+                    } p-2 `}
+                  >
+                    counter
+                  </Link>
+                )}
+                {location.pathname !== "/login" && (
+                  <Link
+                    to="/reduxcounter"
+                    className={`${
+                      location.pathname === "/reduxcounter" ? "bg-black" : ""
+                    } p-2  `}
+                  >
+                    Redux Counter
+                  </Link>
+                )}
+                {location.pathname !== "/login" && (
+                  <Link
+                    to="/reduxtask"
+                    className={`${
+                      location.pathname === "/reduxtask" ? "bg-black" : ""
+                    } p-2  `}
+                  >
+                    Redux Task
+                  </Link>
+                )}
+                {location.pathname !== "/login" && (
+                  <Link
+                    to="/reduxweather"
+                    className={`${
+                      location.pathname === "/reduxweather" ? "bg-black" : ""
+                    } p-2  `}
+                  >
+                    ReduxWeather
+                  </Link>
+                )}
                 <Link
-                  to="/todo"
-                  className={`${
-                    location.pathname === "/todo" ? "bg-black" : ""
-                  } p-2  `}
-                >
-                  Todo
-                </Link>
-                <Link
-                  to="/counter"
-                  className={`${
-                    location.pathname === "/counter" ? "bg-black" : ""
-                  } p-2 `}
-                >
-                  counter
-                </Link>
-                <Link
-                  to="/reduxcounter"
-                  className={`${
-                    location.pathname === "/reduxcounter" ? "bg-black" : ""
-                  } p-2  `}
-                >
-                  Redux Counter
-                </Link>
-                <Link
-                  to="/reduxtask"
-                  className={`${
-                    location.pathname === "/reduxtask" ? "bg-black" : ""
-                  } p-2  `}
-                >
-                  Redux Task
-                </Link>
-                <Link
-                  to="/reduxweather"
+                  to="/login"
                   className={`${
                     location.pathname === "/reduxweather" ? "bg-black" : ""
                   } p-2  `}
                 >
-                  ReduxWeather
+                  Login
                 </Link>
               </Box>
             </Box>
@@ -103,8 +111,10 @@ export default function Header() {
                 <i className="fa-regular fa-user m-0"></i>
               </IconButton>
               <Menu
-                open={anchorEleNav}
+                sx={{ mt: "45px" }}
+                open={Boolean(anchorEleNav)}
                 onClose={handleCloseUserMenu}
+                keepMounted
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "right",
