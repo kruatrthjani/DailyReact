@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Header from "./layouts/Header";
+import { constantRoute } from "./constants/route";
+import Header from "./components/Header";
 import "./App.css";
 import { Box, Typography } from "@mui/material";
 import Main from "./layouts/Main";
+import Footer from "./components/Footer";
 
 function App() {
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ function App() {
   useEffect(() => {
     if (location.pathname === "/") {
       console.log("location");
-      navigate("/todo");
+      navigate(constantRoute.todo);
     }
   }, []);
 
@@ -23,24 +25,7 @@ function App() {
       <div>
         <Outlet />
       </div>
-      <Box
-        sx={{
-          position: "fixed",
-          left: 0,
-          bottom: 0,
-          width: "100%",
-          backgroundColor: "gray",
-          color: "white",
-          textAlign: "center",
-        }}
-      >
-        <Typography
-          sx={{ fontFamily: "Raleway, Arial" }}
-          className="text-blue-600"
-        >
-          Mui
-        </Typography>
-      </Box>
+      <Footer />
     </div>
   );
 }

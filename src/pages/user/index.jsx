@@ -1,41 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { getUserThunk } from "../../services/thunk/allthunks";
+import LogoutHandler from "./Logout";
+import StyledInput from "../../components/StyledInput";
+import { useDispatch, useSelector } from "react-redux";
 export default function User() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  const { userData, status, error } = useSelector((state) => state.Login);
 
-  // useEffect(() => {
-  //   function redirect() {
-  //     if (
-  //       !localStorage.getItem("accessToken") ||
-  //       !localStorage.getItem("refreshToken")
-  //     ) {
-  //       navigate("/login");
-  //     } else {
-  //       navigate("/user");
-  //     }
-  //   }
-  //   redirect();
-  // }, [location.pathname]);
-
-  function LogoutHandler() {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    navigate("/login");
-  }
+  /* providing accessToken in bearer */
 
   return (
     <>
-      <p>user is here</p>
-      <Button
+      user data here
+      {/* <Button
         variant="contained"
         onClick={() => {
           LogoutHandler();
+          navigate("/login");
         }}
       >
         Logout
-      </Button>
+      </Button> */}
     </>
   );
 }

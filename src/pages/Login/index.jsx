@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginThunk } from "../../services/thunk/allthunks";
 import { useSelector } from "react-redux";
+import { constantRoute } from "../../constants/route";
+
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -27,9 +29,9 @@ export default function Login() {
         localStorage.getItem("accessToken") ||
         localStorage.getItem("refreshToken")
       ) {
-        navigate("/user");
+        navigate(constantRoute.user);
       } else {
-        navigate("/login");
+        navigate(constantRoute.login);
       }
     }
     redirect();

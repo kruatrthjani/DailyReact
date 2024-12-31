@@ -99,34 +99,40 @@ export default function Header() {
                 </Link>
               </Box>
             </Box>
-            <Box className=" flex justify-end ">
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{
-                  border: "1px solid white",
-                  margin: "5px",
-                  color: "white",
-                }}
-              >
-                <i className="fa-regular fa-user m-0"></i>
-              </IconButton>
-              <Menu
-                sx={{ mt: "45px" }}
-                open={Boolean(anchorEleNav)}
-                onClose={handleCloseUserMenu}
-                keepMounted
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              >
-                {settings.map((setting) => (
-                  <MenuItem onClick={handleCloseUserMenu} key={setting}>
-                    <Typography>{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+            {location.pathname !== "/login" && (
+              <Box className=" flex justify-end ">
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  sx={{
+                    border: "1px solid white",
+                    margin: "5px",
+                    color: "white",
+                  }}
+                >
+                  <i className="fa-regular fa-user m-0"></i>
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  open={Boolean(anchorEleNav)}
+                  onClose={handleCloseUserMenu}
+                  keepMounted
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem onClick={handleCloseUserMenu} key={setting}>
+                      <Typography>
+                        <Button onClick={() => navigate(setting.toLowerCase())}>
+                          {setting}
+                        </Button>
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            )}
           </Toolbar>
         </Container>
       </span>

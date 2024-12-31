@@ -16,6 +16,31 @@ export const LoginThunk = createAsyncThunk(
   }
 );
 
+export const getUserThunk = createAsyncThunk("user/userLogin", async (id) => {
+  console.log("id=", id);
+  const resData = await userapi({
+    Authorizartion: true,
+    method: "GET",
+    requestType: "getuser",
+    id,
+  });
+  console.log("res data===", resData);
+  return resData;
+});
+
+export const EditUserThunk = createAsyncThunk(
+  "edit/userLogin",
+  async (data) => {
+    const resData = await userapi({
+      Authorizartion: true,
+      method: "PATCH",
+      requestType: "setuser",
+      data,
+    });
+
+    return resData;
+  }
+);
 export const addWeatherThunk = createAsyncThunk(
   "add/weatherData",
   async (data) => {

@@ -10,6 +10,10 @@ import Login from "../pages/Login";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import User from "../pages/user";
+import Profile from "../pages/profile";
+import LogoutHandler from "../pages/user/Logout";
+import { constantRoute } from "../constants/route";
+import NotFound from "../pages/NotFound";
 
 export const routes = createBrowserRouter([
   {
@@ -20,7 +24,7 @@ export const routes = createBrowserRouter([
         element: <PublicRoute />,
         children: [
           {
-            path: "/login",
+            path: constantRoute.login,
             element: <Login />,
           },
         ],
@@ -29,35 +33,47 @@ export const routes = createBrowserRouter([
         element: <PrivateRoute />,
         children: [
           {
-            path: "/user",
+            path: constantRoute.user,
             element: <User />,
           },
           {
-            path: "/todo",
+            path: constantRoute.todo,
             element: <Todo />,
           },
           {
-            path: "/counter",
+            path: constantRoute.counter,
             element: <Counter />,
           },
           {
-            path: "/reduxcounter",
+            path: constantRoute.reduxcounter,
             element: <ReduxCounter />,
           },
           {
-            path: "/reduxTask",
+            path: constantRoute.ReduxTaskManager,
             element: <ReduxTaskManager />,
           },
           {
-            path: "/reduxweather",
+            path: constantRoute.WeatherDashboard,
             element: <WeatherDashboard />,
           },
           {
-            path: "/weatherform",
+            path: constantRoute.weatherform,
             element: <WeathForm />,
+          },
+          {
+            path: constantRoute.profile,
+            element: <Profile />,
+          },
+          {
+            path: constantRoute.logout,
+            element: <LogoutHandler />,
           },
         ],
       },
     ],
+  },
+  {
+    path: constantRoute.notfound,
+    element: <NotFound />,
   },
 ]);

@@ -1,5 +1,7 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { constantRoute } from "../constants/route";
+
 export default function PublicRoute() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -9,8 +11,7 @@ export default function PublicRoute() {
         localStorage.getItem("accessToken") ||
         localStorage.getItem("refreshToken")
       ) {
-        console.log("public");
-        navigate("/user");
+        navigate(constantRoute.user);
       } else {
         console.log("navigatedIn");
         return <Outlet />;
@@ -22,8 +23,7 @@ export default function PublicRoute() {
     localStorage.getItem("accessToken") ||
     localStorage.getItem("refreshToken")
   ) {
-    console.log("public");
-    navigate("/user");
+    navigate(constantRoute.user);
   } else {
     console.log("navigatedIn");
 
