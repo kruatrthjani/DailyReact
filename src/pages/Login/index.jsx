@@ -10,9 +10,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginThunk } from "../../services/thunk/allthunks";
+import { LoginThunk } from "../../redux/thunk/allthunks";
 import { useSelector } from "react-redux";
 import { constantRoute } from "../../constants/route";
+import DangerousIcon from "@mui/icons-material/Dangerous";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -50,7 +51,7 @@ export default function Login() {
   }
 
   return (
-    <Box className="flex justify-center h-screen">
+    <Box className="flex items-center flex-col h-screen">
       <form className="flex flex-col gap-y-3" onSubmit={formSubmitHandler}>
         <StyledInput
           type="text"
@@ -93,6 +94,14 @@ export default function Login() {
           Submit
         </Button>
       </form>
+      <Typography className="text-red-600 flex">
+        {error && (
+          <>
+            <DangerousIcon />
+            <p>invalid crendetialds</p>
+          </>
+        )}
+      </Typography>
     </Box>
   );
 }

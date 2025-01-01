@@ -2,7 +2,8 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { EditUserThunk, getUserThunk } from "../../services/thunk/allthunks";
+
+import { EditUserThunk, getUserThunk } from "../../redux/thunk/allthunks";
 import StyledInput from "../../components/StyledInput";
 import { useState } from "react";
 import { Button } from "@mui/material";

@@ -28,6 +28,7 @@ const LoginSlice = createSlice({
       })
       .addCase(LoginThunk.rejected, (state) => {
         state.status = "failed";
+        console.log("present in failed");
         state.error = "failed to update";
       })
       .addCase(getUserThunk.pending, (state) => {
@@ -42,6 +43,7 @@ const LoginSlice = createSlice({
       })
       .addCase(getUserThunk.rejected, (state) => {
         state.status = "failed";
+
         state.error = "failed to update";
       })
       .addCase(EditUserThunk.pending, (state) => {

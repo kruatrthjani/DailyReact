@@ -13,6 +13,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import { constantRoute } from "../../constants/route";
 export default function Header() {
   const navigate = useNavigate();
   const [anchorEleNav, setAnchorEleNav] = useState(false);
@@ -41,9 +42,9 @@ export default function Header() {
               >
                 {location.pathname !== "/login" && (
                   <Link
-                    to="/todo"
+                    to={constantRoute.todo}
                     className={`${
-                      location.pathname === "/todo" ? "bg-black" : ""
+                      location.pathname === constantRoute.todo ? "bg-black" : ""
                     } p-2  `}
                   >
                     Todo
@@ -51,9 +52,11 @@ export default function Header() {
                 )}
                 {location.pathname !== "/login" && (
                   <Link
-                    to="/counter"
+                    to={constantRoute.counter}
                     className={`${
-                      location.pathname === "/counter" ? "bg-black" : ""
+                      location.pathname === constantRoute.counter
+                        ? "bg-black"
+                        : ""
                     } p-2 `}
                   >
                     counter
@@ -61,9 +64,11 @@ export default function Header() {
                 )}
                 {location.pathname !== "/login" && (
                   <Link
-                    to="/reduxcounter"
+                    to={constantRoute.reduxcounter}
                     className={`${
-                      location.pathname === "/reduxcounter" ? "bg-black" : ""
+                      location.pathname === constantRoute.reduxcounter
+                        ? "bg-black"
+                        : ""
                     } p-2  `}
                   >
                     Redux Counter
@@ -71,9 +76,11 @@ export default function Header() {
                 )}
                 {location.pathname !== "/login" && (
                   <Link
-                    to="/reduxtask"
+                    to={constantRoute.reduxTask}
                     className={`${
-                      location.pathname === "/reduxtask" ? "bg-black" : ""
+                      location.pathname === constantRoute.reduxTask
+                        ? "bg-black"
+                        : ""
                     } p-2  `}
                   >
                     Redux Task
@@ -81,18 +88,20 @@ export default function Header() {
                 )}
                 {location.pathname !== "/login" && (
                   <Link
-                    to="/reduxweather"
+                    to={constantRoute.reduxweather}
                     className={`${
-                      location.pathname === "/reduxweather" ? "bg-black" : ""
+                      location.pathname === constantRoute.reduxweather
+                        ? "bg-black"
+                        : ""
                     } p-2  `}
                   >
                     ReduxWeather
                   </Link>
                 )}
                 <Link
-                  to="/login"
+                  to={constantRoute.login}
                   className={`${
-                    location.pathname === "/reduxweather" ? "bg-black" : ""
+                    location.pathname === constantRoute.login ? "bg-black" : ""
                   } p-2  `}
                 >
                   Login

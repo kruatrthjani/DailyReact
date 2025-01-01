@@ -4,7 +4,7 @@ export const constantRoute = {
   todo: "/todo",
   counter: "/counter",
   reduxcounter: "/reduxcounter",
-  reduxTask: "/reduxTask",
+  reduxTask: "/reduxtask",
   reduxweather: "/reduxweather",
   weatherform: "/weatherform",
   profile: "/profile",

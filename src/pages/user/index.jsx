@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
-import { getUserThunk } from "../../services/thunk/allthunks";
+
 import LogoutHandler from "./Logout";
 import StyledInput from "../../components/StyledInput";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +13,8 @@ export default function User() {
   /* providing accessToken in bearer */
 
   return (
-    <>
-      user data here
+    <div className="">
+      <h1 className="text-center">Logged in user page</h1>
       {/* <Button
         variant="contained"
         onClick={() => {
@@ -24,6 +24,6 @@ export default function User() {
       >
         Logout
       </Button> */}
-    </>
+    </div>
   );
 }

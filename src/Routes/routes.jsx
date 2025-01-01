@@ -1,10 +1,10 @@
 import { createBrowserRouter, useNavigate } from "react-router-dom";
 import App from "../App";
-import Todo from "../pages/Todo";
+import Todo from "../pages/Todo/index";
 import Counter from "../pages/Counter";
 import ReduxCounter from "../pages/Reduxcounter";
 import ReduxTaskManager from "../pages/ReduxTask";
-import WeatherDashboard from "../pages/Weather";
+import WeatherDashboard from "../pages/Weather/index";
 import WeathForm from "../pages/Weather/WeatherForm";
 import Login from "../pages/Login";
 import PublicRoute from "./PublicRoute";
@@ -49,11 +49,11 @@ export const routes = createBrowserRouter([
             element: <ReduxCounter />,
           },
           {
-            path: constantRoute.ReduxTaskManager,
+            path: constantRoute.reduxTask,
             element: <ReduxTaskManager />,
           },
           {
-            path: constantRoute.WeatherDashboard,
+            path: constantRoute.reduxweather,
             element: <WeatherDashboard />,
           },
           {

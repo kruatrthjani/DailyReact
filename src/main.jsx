@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { routes } from "./Routes/routes.jsx";
 import { useState, createContext } from "react";
 import "./styles/index.css";
-import store from "./services/store/store.js";
+import store from "../src/redux/store/store.js";
 import { Provider } from "react-redux";
 import App from "./App.jsx";
 

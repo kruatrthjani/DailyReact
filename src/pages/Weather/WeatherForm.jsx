@@ -9,11 +9,12 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import TextField from "@mui/material/TextField";
+
 import {
   addWeatherThunk,
   editWeatherThunk,
   weatherThunk,
-} from "../../services/thunk/allthunks";
+} from "../../redux/thunk/allthunks";
 import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";

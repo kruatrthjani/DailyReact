@@ -8,13 +8,14 @@ import Button from "../../components/Button";
 //   fetchTaskThunk,
 //   completeTaskThunk,
 // } from "../../services/api/thunk/TasklSlice";
+
 import {
   addTaskThnuk,
   fetchTaskThunk,
   editTaskThunk,
   deleteTaskThunk,
   completeTaskThunk,
-} from "../../services/thunk/TasklSlice";
+} from "../../redux/thunk/TasklSlice";
 export default function ReduxTaskManager() {
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);

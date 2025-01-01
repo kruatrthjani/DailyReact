@@ -1,5 +1,5 @@
-import { userapi } from "../api/userapi";
-import { apiRequest } from "../api/weatherapi";
+import { apiRequest } from "../../utils/weatherapi";
+import { AxiosInstance } from "../../axios/axiosInstance";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const LoginThunk = createAsyncThunk(
@@ -10,16 +10,20 @@ export const LoginThunk = createAsyncThunk(
       password,
       expiresInMins: 30,
     };
-    const resData = await userapi({ method: "POST", data });
-
+    console.log("insert=", data);
+    const resData = await AxiosInstance({ method: "POST", data });
+    if (!resData.ok) {
+      console.log("failed");
+    }
+    console.log("responsed=", resData);
     return resData;
   }
 );
 
 export const getUserThunk = createAsyncThunk("user/userLogin", async (id) => {
   console.log("id=", id);
-  const resData = await userapi({
-    Authorizartion: true,
+  const resData = await AxiosInstance({
+    Authorization: true,
     method: "GET",
     requestType: "getuser",
     id,
@@ -31,8 +35,8 @@ export const getUserThunk = createAsyncThunk("user/userLogin", async (id) => {
 export const EditUserThunk = createAsyncThunk(
   "edit/userLogin",
   async (data) => {
-    const resData = await userapi({
-      Authorizartion: true,
+    const resData = await AxiosInstance({
+      Authorization: true,
       method: "PATCH",
       requestType: "setuser",
       data,

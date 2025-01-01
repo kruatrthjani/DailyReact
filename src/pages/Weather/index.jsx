@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  weatherThunk,
-  deleteWeatherThunk,
-} from "../../services/thunk/allthunks";
+import { weatherThunk, deleteWeatherThunk } from "../../redux/thunk/allthunks";
 import Button from "@mui/material/Button";
 import {
   Box,

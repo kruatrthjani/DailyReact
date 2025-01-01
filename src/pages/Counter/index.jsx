@@ -2,7 +2,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { useState, useReducer, useEffect } from "react";
 import Button from "../../components/Button";
 import CounterTimer from "../../components/Countertimer";
-import { intialState, reducer } from "../../services/thunk/reducers/counter";
+////import { intialState, reducer } from "../../services/thunk/reducers/counter";
+import { intialState, reducer } from "../../redux/thunk/reducers/counter";
 export default function Counter() {
   const navigate = useNavigate();
   //const [counter,setCounter]=useState(0)
