@@ -2,13 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 //import counterSlice from "../thunk/counterSlice/index";
 import counterSlice from "../thunk/counterSlice/index";
 import TaskSlice from "../thunk/TasklSlice/index";
-import WeatherSlice from "../thunk/WeatherSlice/index";
+import DeviceSlice from "../thunk/DeviceSlice/index";
 import LoginSlice from "../thunk/LoginSlice/index";
 const store = configureStore({
   reducer: {
     counters: counterSlice,
     Task: TaskSlice,
-    Weather: WeatherSlice,
+    Weather: DeviceSlice,
     Login: LoginSlice,
   },
 });

@@ -12,35 +12,90 @@ import {
   IconButton,
   Avatar,
 } from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Drawer from "@mui/material/Drawer";
 import { useLocation } from "react-router-dom";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { constantRoute } from "../../constants/route";
+import MailIcon from "@mui/icons-material/Mail";
+
 export default function Header() {
+  const drawerWidth = 240;
+
   const navigate = useNavigate();
   const [anchorEleNav, setAnchorEleNav] = useState(false);
   const location = useLocation();
   const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  const theme = useTheme();
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
   function handleOpenUserMenu() {
     setAnchorEleNav(true);
   }
   function handleCloseUserMenu() {
     setAnchorEleNav(false);
   }
+
+  const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  }));
+
   return (
     <div className="bg-blue-500 text-white mb-3">
       <span className="flex justify-center gap-x-5">
         <Container maxWidth="1">
           <Toolbar>
             <Box>
-              <Typography>Logo </Typography>
+              {location.pathname !== constantRoute.login && (
+                <Toolbar>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    sx={[
+                      {
+                        mr: 2,
+                      },
+                      open && { display: "none" },
+                    ]}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Toolbar>
+              )}
             </Box>
-
-            <Box className="flex flex-1 justify-center gap-x-5">
+            {location.pathname === constantRoute.login && (
+              <Typography className="w-full text-center ">LOGIN</Typography>
+            )}
+            {/* <Box className="flex flex-1 justify-center gap-x-5">
               <Box
                 sx={{
                   display: "flex",
                 }}
               >
-                {location.pathname !== "/login" && (
+                {location.pathname !== constantRoute.login && (
                   <Link
                     to={constantRoute.todo}
                     className={`${
@@ -50,7 +105,7 @@ export default function Header() {
                     Todo
                   </Link>
                 )}
-                {location.pathname !== "/login" && (
+                {location.pathname !== constantRoute.login && (
                   <Link
                     to={constantRoute.counter}
                     className={`${
@@ -62,7 +117,7 @@ export default function Header() {
                     counter
                   </Link>
                 )}
-                {location.pathname !== "/login" && (
+                {location.pathname !== constantRoute.login && (
                   <Link
                     to={constantRoute.reduxcounter}
                     className={`${
@@ -74,7 +129,7 @@ export default function Header() {
                     Redux Counter
                   </Link>
                 )}
-                {location.pathname !== "/login" && (
+                {location.pathname !== constantRoute.login && (
                   <Link
                     to={constantRoute.reduxTask}
                     className={`${
@@ -86,7 +141,7 @@ export default function Header() {
                     Redux Task
                   </Link>
                 )}
-                {location.pathname !== "/login" && (
+                {location.pathname !== constantRoute.login && (
                   <Link
                     to={constantRoute.reduxweather}
                     className={`${
@@ -95,7 +150,7 @@ export default function Header() {
                         : ""
                     } p-2  `}
                   >
-                    ReduxWeather
+                    ReduxDevice
                   </Link>
                 )}
                 <Link
@@ -107,10 +162,10 @@ export default function Header() {
                   Login
                 </Link>
               </Box>
-            </Box>
-            {location.pathname !== "/login" && (
+            </Box> */}
+            {location.pathname !== constantRoute.login && (
               <Box className=" flex justify-end ">
-                <IconButton
+                {/* <IconButton
                   onClick={handleOpenUserMenu}
                   sx={{
                     border: "1px solid white",
@@ -119,7 +174,7 @@ export default function Header() {
                   }}
                 >
                   <i className="fa-regular fa-user m-0"></i>
-                </IconButton>
+                </IconButton> */}
                 <Menu
                   sx={{ mt: "45px" }}
                   open={Boolean(anchorEleNav)}
@@ -145,6 +200,80 @@ export default function Header() {
           </Toolbar>
         </Container>
       </span>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          {[
+            constantRoute.todo,
+            constantRoute.counter,
+            constantRoute.reduxcounter,
+            constantRoute.reduxTask,
+          ].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <Button
+                  onClick={() => {
+                    navigate(text);
+                    handleDrawerClose();
+                  }}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {text.replace("/", "")}
+                </Button>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {[
+            constantRoute.reduxdevice,
+            constantRoute.profile,
+            constantRoute.logout,
+          ].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <Button
+                  onClick={() => {
+                    navigate(text);
+                    handleDrawerClose();
+                  }}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {text.replace("/", "")}
+                </Button>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </div>
   );
 }

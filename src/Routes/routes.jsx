@@ -4,8 +4,8 @@ import Todo from "../pages/Todo/index";
 import Counter from "../pages/Counter";
 import ReduxCounter from "../pages/Reduxcounter";
 import ReduxTaskManager from "../pages/ReduxTask";
-import WeatherDashboard from "../pages/Weather/index";
-import WeathForm from "../pages/Weather/WeatherForm";
+import DeviceDashboard from "../pages/Device/index";
+import DeviceForm from "../pages/Device/DeviceForm";
 import Login from "../pages/Login";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -53,12 +53,12 @@ export const routes = createBrowserRouter([
             element: <ReduxTaskManager />,
           },
           {
-            path: constantRoute.reduxweather,
-            element: <WeatherDashboard />,
+            path: constantRoute.reduxdevice,
+            element: <DeviceDashboard />,
           },
           {
-            path: constantRoute.weatherform,
-            element: <WeathForm />,
+            path: constantRoute.deviceform,
+            element: <DeviceForm />,
           },
           {
             path: constantRoute.profile,

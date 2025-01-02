@@ -1,8 +1,7 @@
 import { Typography } from "@mui/material";
-import { Box } from "@mui/material";
+import { Box, TextField, TableFooter } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-
 import { EditUserThunk, getUserThunk } from "../../redux/thunk/allthunks";
 import StyledInput from "../../components/StyledInput";
 import { useState } from "react";
@@ -12,16 +11,29 @@ export default function Profile() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(0);
+  const [phone, setPhone] = useState("");
   const [eyecolor, setEyeColor] = useState("");
 
   const dispatch = useDispatch();
   const { userData, status, error } = useSelector((state) => state.Login);
   useEffect(() => {
-    if (status === "loading" || status === "idle") {
+    if (status === "idle" || status == "loading") {
       dispatch(getUserThunk());
     }
   }, [status]);
+
+  useEffect(() => {
+    {
+      userData && setData();
+    }
+    function setData() {
+      setFirstName(userData.firstName);
+      setLastName(userData.lastName);
+      setEmail(userData.email);
+      setPhone(userData.phone);
+      setEyeColor(userData.eyeColor);
+    }
+  }, [status, userData]);
 
   function editFormHandler() {
     event.preventDefault();
@@ -43,42 +55,51 @@ export default function Profile() {
   return (
     userData && (
       <Box>
-        <Typography>{"fn=" + userData && userData.firstName}</Typography>
-        <Typography>{"ln=" + userData && userData.lastName}</Typography>
-        <Typography>{"email=" + userData && userData.email}</Typography>
-        <Typography>{"phone=" + userData && userData.phone}</Typography>
-        <Typography>{"eye=" + userData && userData.eyeColor}</Typography>
         <form
           className="w-3/12 mx-auto flex flex-col gap-y-3"
           onSubmit={editFormHandler}
         >
-          <StyledInput
-            placeholder="first Name"
+          <TextField
+            variant="filled"
             onChange={(e) => setFirstName(e.target.value)}
             value={firstName}
-          ></StyledInput>
-          <StyledInput
-            placeholder="last Name"
+            label="first Name"
+          />
+
+          <TextField
+            variant="filled"
+            label="last Name"
             onChange={(e) => setLastName(e.target.value)}
             value={lastName}
-          ></StyledInput>
-          <StyledInput
-            placeholder="Email"
+          />
+
+          <TextField
+            variant="filled"
+            label="Email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-          ></StyledInput>
-          <StyledInput
-            placeholder="phone"
-            type="number"
+          />
+
+          <TextField
+            variant="filled"
+            label="phone"
             onChange={(e) => setPhone(e.target.value)}
             value={phone}
-          ></StyledInput>
-          <StyledInput
-            placeholder="eyecolor"
+          />
+
+          <TextField
+            variant="filled"
+            label="eyecolor"
             value={eyecolor}
             onChange={(e) => setEyeColor(e.target.value)}
-          ></StyledInput>
-          <Button variant="contained" type="submit" color="primary">
+          />
+
+          <Button
+            variant="contained"
+            type="submit"
+            color="secondary"
+            className="hover:font-bold active:bg-blue-500 active:mt-1 "
+          >
             Submit
           </Button>
         </form>

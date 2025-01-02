@@ -18,8 +18,9 @@ import {
 import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { constantRoute } from "../../constants/route";
 
-export default function WeathForm() {
+export default function DeviceForm() {
   const savedName = localStorage.getItem("name") || "";
   const savedColor = localStorage.getItem("color") || "";
   const navigate = useNavigate();
@@ -150,7 +151,7 @@ export default function WeathForm() {
 
     // Clear form after submission
     resetForm();
-    navigate("/reduxweather");
+    navigate(constantRoute.reduxdevice);
   }
 
   return (

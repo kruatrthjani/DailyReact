@@ -16,7 +16,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-export default function WeatherDashboard() {
+import { constantRoute } from "../../constants/route";
+export default function DeviceDashboard() {
   const navigate = useNavigate();
   const columns = [
     { field: "name", headerName: "Device Name", width: 200, editable: false },
@@ -118,7 +119,7 @@ export default function WeatherDashboard() {
   function handleEdit(row) {
     if (!editingId) {
       const id = row.id;
-      navigate("/weatherform", { state: id });
+      navigate(constantRoute.deviceform, { state: id });
     } else {
       resetForm();
       setEditingId("");
@@ -212,7 +213,9 @@ export default function WeatherDashboard() {
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => navigate("/weatherform")}
+          onClick={() => {
+            navigate(constantRoute.deviceform);
+          }}
         >
           <Box className="flex items-center gap-x-2 ">
             <i className="fa-solid fa-plus "></i> <p className>create New</p>

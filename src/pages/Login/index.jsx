@@ -24,6 +24,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userData, status, error } = useSelector((state) => state.Login);
+
   useMemo(() => {
     function redirect() {
       if (
@@ -51,11 +52,16 @@ export default function Login() {
   }
 
   return (
-    <Box className="flex items-center flex-col h-screen">
-      <form className="flex flex-col gap-y-3" onSubmit={formSubmitHandler}>
-        <StyledInput
+    <Box className="flex items-center flex-col ">
+      <form
+        className="flex flex-col gap-y-3 w-3/12 "
+        onSubmit={formSubmitHandler}
+      >
+        <TextField
+          id="standard-basic"
+          label="Email"
+          variant="standard"
           type="text"
-          placeholder="Enter your email"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
         />
@@ -66,18 +72,25 @@ export default function Login() {
             <ErrorOutlineIcon></ErrorOutlineIcon>username must be valid
           </Typography>
         )}
-
-        <StyledInput
+        <TextField
+          id="standard-basic"
+          label="password"
+          variant="standard"
+          type={visibility ? "text" : "password"}
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+        {/* <StyledInput
           type={visibility ? "text" : "password"}
           placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-        />
+        /> */}
         <Button
           sx={{
             position: "relative",
             top: "-50px",
-            left: "125px",
+            left: "350px",
             width: "5px",
           }}
           onClick={() => setVisibility(!visibility)}
@@ -90,7 +103,12 @@ export default function Login() {
             password must be valid
           </Typography>
         )}
-        <Button sx={{ ml: 1 }} type="submit" variant="contained">
+        <Button
+          sx={{ ml: 1 }}
+          type="submit"
+          variant="contained"
+          color="success"
+        >
           Submit
         </Button>
       </form>

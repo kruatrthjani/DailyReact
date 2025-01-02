@@ -12,13 +12,12 @@ function App() {
   const location = useLocation();
   useEffect(() => {
     if (location.pathname === "/") {
-      console.log("location");
       navigate(constantRoute.todo);
     }
   }, []);
 
   return (
-    <div className="screen">
+    <div className="">
       <div style={{ textAlign: "center" }}>
         <Header />
       </div>

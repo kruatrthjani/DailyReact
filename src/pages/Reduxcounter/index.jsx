@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import Button from "../../components/Button";
 import { useDispatch } from "react-redux";
-//import { increment, decrement } from "../../services/api/thunk/counterSlice";
-//import { increment, decrement } from "../../services/thunk/counterSlice";
+
+import { increment, decrement } from "../../redux/thunk/counterSlice";
 export default function ReduxCounter() {
   const counter = useSelector((state) => state.counters.counter);
 
