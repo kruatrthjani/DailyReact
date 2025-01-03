@@ -14,6 +14,7 @@ import Profile from "../pages/profile";
 import LogoutHandler from "../pages/user/Logout";
 import { constantRoute } from "../constants/route";
 import NotFound from "../pages/NotFound";
+import HouseDashboard from "../pages/Dashboard";
 
 export const routes = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const routes = createBrowserRouter([
           {
             path: constantRoute.profile,
             element: <Profile />,
+          },
+          {
+            path: constantRoute.housedashboard,
+            element: <HouseDashboard />,
           },
           {
             path: constantRoute.logout,

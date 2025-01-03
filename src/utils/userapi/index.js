@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const LOGINURL = () => {
   const url = import.meta.env.VITE_USER_API_END_POINT + "auth/login";
   console.log("url is=", url);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import Loader from "../../components/Loader";
 import { weatherThunk, deleteWeatherThunk } from "../../redux/thunk/allthunks";
 import Button from "@mui/material/Button";
 import {
@@ -21,8 +21,8 @@ export default function DeviceDashboard() {
   const navigate = useNavigate();
   const columns = [
     { field: "name", headerName: "Device Name", width: 200, editable: false },
-    { field: "color", headerName: "Color", width: 80 },
-    { field: "price", headerName: "Price", width: 80 },
+    { field: "color", headerName: "Color", width: 200 },
+    { field: "price", headerName: "Price", width: 150 },
     { field: "description", headerName: "Description", width: 100 },
     { field: "year", headerName: "Year", width: 80 },
     { field: "Generation", header: "Generation", width: 100 },
@@ -71,7 +71,7 @@ export default function DeviceDashboard() {
   }, [name, color]);
 
   if (status === "loading" || status === "pending" || status === "idle")
-    return <p>loading data</p>;
+    return <Loader />;
   if (error) return <p>{error}</p>;
 
   const totalRows = weatherData.map((data) => {
@@ -226,14 +226,14 @@ export default function DeviceDashboard() {
         <DataGrid
           rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
+          // initialState={{
+          //   pagination: {
+          //     paginationModel: {
+          //       pageSize: 5,
+          //     },
+          //   },
+          // }}
+          // pageSizeOptions={[5]}
         />
       </Box>
       <Dialog open={open} onClose={handleCloseDialog} className="px-2">

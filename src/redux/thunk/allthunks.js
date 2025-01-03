@@ -1,6 +1,18 @@
 import { apiRequest } from "../../utils/weatherapi";
-import { AxiosInstance } from "../../axios/axiosInstance";
+import {
+  AxiosInstanceUser,
+  AxiosInstancedashboard,
+} from "../../axios/axiosInstanceuser";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
+export const dashboardThunk = createAsyncThunk("dashboard/house", async () => {
+  const resData = await AxiosInstancedashboard();
+
+  if (!resData) {
+    console.log("failed to fetch");
+  }
+  return resData;
+});
 
 export const LoginThunk = createAsyncThunk(
   "login/userLogin",
@@ -11,31 +23,31 @@ export const LoginThunk = createAsyncThunk(
       expiresInMins: 30,
     };
     console.log("insert=", data);
-    const resData = await AxiosInstance({ method: "POST", data });
+    const resData = await AxiosInstanceUser({ method: "POST", data });
     if (!resData.ok) {
       console.log("failed");
     }
-    console.log("responsed=", resData);
+
     return resData;
   }
 );
 
 export const getUserThunk = createAsyncThunk("user/userLogin", async (id) => {
   console.log("id=", id);
-  const resData = await AxiosInstance({
+  const resData = await AxiosInstanceUser({
     Authorization: true,
     method: "GET",
     requestType: "getuser",
     id,
   });
-  console.log("res data===", resData);
+
   return resData;
 });
 
 export const EditUserThunk = createAsyncThunk(
   "edit/userLogin",
   async (data) => {
-    const resData = await AxiosInstance({
+    const resData = await AxiosInstanceUser({
       Authorization: true,
       method: "PATCH",
       requestType: "setuser",

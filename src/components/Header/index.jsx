@@ -253,6 +253,7 @@ export default function Header() {
           {[
             constantRoute.reduxdevice,
             constantRoute.profile,
+            constantRoute.housedashboard,
             constantRoute.logout,
           ].map((text, index) => (
             <ListItem key={text} disablePadding>

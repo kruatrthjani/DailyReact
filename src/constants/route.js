@@ -9,5 +9,6 @@ export const constantRoute = {
   deviceform: "/deviceform",
   profile: "/profile",
   logout: "/logout",
+  housedashboard: "/house dashboard",
   notfound: "*",
 };
