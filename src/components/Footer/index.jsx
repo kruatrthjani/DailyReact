@@ -19,7 +19,7 @@ export default function Footer() {
         textAlign: "center",
       }}
     >
-      <Box className="flex justify-around border-t border-black w-10/12 mx-auto py-2">
+      <Box className="flex justify-around border-t border-black w-10/12 mx-auto py-2 bg-white">
         <Typography className="flex gap-x-3">
           <p>MUI</p>
           <p>React js</p>

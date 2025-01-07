@@ -12,11 +12,14 @@ const HousedashboardSlice = createSlice({
       })
       .addCase(dashboardThunk.fulfilled, (state, action) => {
         state.status == "succeeded";
+        console.log("action is fullfilled");
         state.houseData = action.payload;
       })
-      .addCase(dashboardThunk.rejected, (state) => {
+      .addCase(dashboardThunk.rejected, (state, action) => {
+        console.log("thunk");
+        console.log(action.error);
         state.status = "failed";
-        state.error = "something went wrong";
+        state.error = action.error.message;
       });
   },
 });

@@ -5,6 +5,8 @@ import TaskSlice from "../thunk/TasklSlice/index";
 import DeviceSlice from "../thunk/DeviceSlice/index";
 import LoginSlice from "../thunk/LoginSlice/index";
 import HouseDashboardSlice from "../thunk/DashboardSlice/index";
+import WetherDashboardSlice from "../thunk/WeatherDashboard/index";
+
 const store = configureStore({
   reducer: {
     counters: counterSlice,
@@ -12,6 +14,7 @@ const store = configureStore({
     Weather: DeviceSlice,
     Login: LoginSlice,
     Dashboard: HouseDashboardSlice,
+    WeatherDashboard: WetherDashboardSlice,
   },
 });
 export default store;

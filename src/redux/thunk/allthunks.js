@@ -1,17 +1,51 @@
 import { apiRequest } from "../../utils/weatherapi";
 import {
   AxiosInstanceUser,
+  AxiosInstanceWeatherdashboard,
   AxiosInstancedashboard,
 } from "../../axios/axiosInstanceuser";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const dashboardThunk = createAsyncThunk("dashboard/house", async () => {
-  const resData = await AxiosInstancedashboard();
+export const weatherDashboardThunk = createAsyncThunk(
+  "dashboard/weather",
+  async () => {
+    const cities = [
+      "-33.909176540959386,151.24717375999697",
+      "31.024974537618093,78.17052276217451",
+      "23.019242,72.535218",
+    ];
 
-  if (!resData) {
-    console.log("failed to fetch");
+    try {
+      const resData = await Promise.all(
+        cities.map(async (cords) => {
+          const responseData = await AxiosInstanceWeatherdashboard(cords);
+          console.log("responseData =", responseData);
+          return responseData;
+        })
+      );
+
+      console.log("resData =", resData);
+      return resData;
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
+      throw new Error(error);
+    }
   }
-  return resData;
+);
+
+export const dashboardThunk = createAsyncThunk("dashboard/house", async () => {
+  try {
+    const resData = await AxiosInstancedashboard();
+    console.log("resdata=", resData);
+    return resData;
+  } catch (error) {
+    console.log(error);
+    const errordata = {
+      statuscode: error.request.status,
+      message: error.message,
+    };
+    throw new Error(JSON.stringify(errordata));
+  }
 });
 
 export const LoginThunk = createAsyncThunk(

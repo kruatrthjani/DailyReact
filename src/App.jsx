@@ -10,21 +10,40 @@ import Footer from "./components/Footer";
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
     if (location.pathname === "/") {
       navigate(constantRoute.todo);
     }
-  }, []);
+  }, [location.pathname, navigate]);
 
   return (
-    <div className="">
-      <div style={{ textAlign: "center" }}>
+    <div
+      className="app-container"
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      {/* Header */}
+      <header style={{ textAlign: "center" }}>
         <Header />
-      </div>
-      <div>
+      </header>
+
+      {/* Main Content */}
+      <main
+        style={{
+          flex: 1,
+          overflow: "auto",
+          paddingBottom: "60px" /* Adjust based on footer height */,
+        }}
+      >
         <Outlet />
-      </div>
-      <Footer />
+      </main>
+
+      {/* Footer */}
+      <footer
+        style={{ position: "relative", bottom: 0, left: 0, width: "100%" }}
+      >
+        <Footer />
+      </footer>
     </div>
   );
 }

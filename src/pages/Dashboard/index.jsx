@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import Error from "../../components/Error";
 import { dashboardThunk } from "../../redux/thunk/allthunks";
+import { weatherDashboardThunk } from "../../redux/thunk/allthunks";
 import Loader from "../../components/Loader";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/joy/CircularProgress";
@@ -11,13 +12,28 @@ import { BarChart } from "@mui/x-charts/BarChart";
 
 export default function HouseDashboard() {
   const { houseData, status, error } = useSelector((state) => state.Dashboard);
+  const {
+    weatherDashboardData,
+    status: weatherstatus,
+    error: weathererror,
+  } = useSelector((state) => state.WeatherDashboard);
   const dispatch = useDispatch();
-  const [furnished, setFurnished] = useState(0);
+
   useEffect(() => {
     if (status === "idle" || status === "loading" || status === "pending") {
       dispatch(dashboardThunk());
     }
   }, [status]);
+
+  useEffect(() => {
+    if (
+      weatherstatus === "idle" ||
+      weatherstatus === "loading" ||
+      weatherstatus === "pending"
+    ) {
+      dispatch(weatherDashboardThunk());
+    }
+  }, [weatherstatus]);
 
   function furnishedProgress() {
     const furlen = houseData.filter((data) => {
@@ -104,10 +120,18 @@ export default function HouseDashboard() {
   if (status === "idle" || status === "pending") {
     return <Loader />;
   }
-  if (error) return <p>Error</p>;
 
+  if (error) return <Error data={error} />;
+  if (weathererror) return <Error data={weathererror} />;
+  const colors = ["yellow", "red", "blue"];
+  const seriesData = weatherDashboardData.map((data, index) => ({
+    data: [data.current.temp_c],
+    label: data.location.name,
+    color: colors[index % colors.length],
+  }));
+  console.log(weatherDashboardData);
   return (
-    <Box>
+    <Box className={``}>
       <Box className="flex justify-around">
         <GraphGraphComponent
           text="Furhished House ratio"
@@ -118,6 +142,24 @@ export default function HouseDashboard() {
         <GraphGraphComponent
           text="Luxury facilities houses"
           value={facilityProgress()}
+        />
+      </Box>
+      <Box className=" flex">
+        <BarChart
+          xAxis={[{ scaleType: "band", data: ["range"] }]}
+          series={seriesData}
+          width={500}
+          height={400}
+        />
+        <BarChart
+          xAxis={[{ scaleType: "band", data: ["range"] }]}
+          series={[
+            { data: [Budget("low")], label: "low", color: "yellow" },
+            { data: [Budget("mid")], label: "mid" },
+            { data: [Budget("high")], label: "high" },
+          ]}
+          width={500}
+          height={400}
         />
       </Box>
       <Box className="flex justify-around mt-6">
@@ -132,17 +174,6 @@ export default function HouseDashboard() {
           </Typography>
         </Box>
       </Box>
-      <BarChart
-        className="mx-auto"
-        xAxis={[{ scaleType: "band", data: ["range"] }]}
-        series={[
-          { data: [Budget("low")], label: "low", color: "yellow" },
-          { data: [Budget("mid")], label: "mid" },
-          { data: [Budget("high")], label: "high" },
-        ]}
-        width={500}
-        height={400}
-      />
     </Box>
   );
 }
